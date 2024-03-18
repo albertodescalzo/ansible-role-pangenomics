@@ -1,0 +1,25 @@
+galaxy_info:
+  role_name: pangenomics
+  namespace: albertodescalzo
+  author: Alberto Descalzo
+  description: "Installation of (bioinformatics) pangenomics software in VMs within deNBI Cloud including a widespread variety of tools to work with pangenomes"
+
+  license: MIT
+
+  min_ansible_version: "2.14"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - "focal"
+        - "jammy"
+
+  galaxy_tags:
+    - bioinformatics
+    - pangenomics
+    - deNBI
+
+environment:
+    - Cloud
+
+dependencies: []
