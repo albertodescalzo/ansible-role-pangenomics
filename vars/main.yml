@@ -1,8 +1,8 @@
 ---
-#home_path: /home/runner/work
-#username: runner
-home_path: /home/ubuntu
-username: ubuntu
+home_path: /home/runner/work
+username: runner
+# home_path: /home/ubuntu
+# username: ubuntu
 miniconda_version: py310_23.3.1-0
 miniforge_version: 23.11.0-0
 wfmash_version: v0.10.3
