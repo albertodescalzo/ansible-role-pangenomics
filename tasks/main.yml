@@ -220,164 +220,164 @@
 #     owner: '{{ username }}'
 #     group: '{{ username }}'
 #     mode: '0755'
-- name: Download miniasm.
-  ansible.builtin.get_url:
-    url: 'https://github.com/lh3/miniasm/archive/refs/tags/v{{ miniasm_version }}.tar.gz'
-    dest: /tmp/miniasm.tar.gz
-    owner: '{{ username }}'
-    mode: 0755
-- name: Unzip miniasm.
-  ansible.builtin.unarchive:
-    src: /tmp/miniasm.tar.gz
-    dest: /tmp/
-    remote_src: true
-- name: Build miniasm.
-  command: make
-  args: 
-    chdir: '/tmp/miniasm-{{ miniasm_version }}'
-    creates: '/tmp/miniasm- {{ miniasm_version }}/miniasm'
-- name: Copy miniasm to path.
-  become: true
-  ansible.builtin.copy:
-    src: '/tmp/miniasm-{{ miniasm_version }}/miniasm'
-    dest: /usr/local/bin/miniasm
-    remote_src: true
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    mode: '0755'
-- name: Download vg.
-  become: true
-  get_url:
-    url: 'https://github.com/vgteam/vg/releases/download/{{ vg_version }}/vg'
-    dest: /usr/local/bin/vg
-    owner: '{{ username }}'
-    mode: 0755
-- name: Download odgi.
-  become: true
-  get_url:
-    url: 'https://github.com/pangenome/odgi/releases/download/{{ odgi_version }}/odgi-{{ odgi_version }}.tar.gz'
-    dest: /tmp/odgi.tar.gz
-    owner: '{{ username }}'
-    mode: 0755
-- name: Unzip odgi.
-  ansible.builtin.unarchive:
-    src: /tmp/odgi.tar.gz
-    dest: /tmp/
-    remote_src: true
-- name: Make odgi 1/2.
-  ansible.builtin.command: cmake -DBUILD_STATIC=1 -H. -Bbuild 
-  args:
-    chdir: '/tmp/odgi-{{ odgi_version }}'
-    creates: '/tmp/odgi-{{ odgi_version }}/build/Makefile'
-- name: Make odgi 2/2.
-  ansible.builtin.command: cmake --build build -- -j 3
-  args:
-    chdir: '/tmp/odgi-{{ odgi_version }}'
-    creates: '/tmp/odgi- {{odgi_version }}/bin/odgi'
-- name: Copy odgi to path.
-  become: true
-  ansible.builtin.copy:
-    src: '/tmp/odgi-{{ odgi_version }}/bin/odgi'
-    dest: /usr/local/bin/odgi
-    remote_src: true
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    mode: '0755'
-- name: Get Bandage.
-  ansible.builtin.get_url:
-    url: https://github.com/rrwick/Bandage/releases/download/v0.8.1/Bandage_Ubuntu_dynamic_v0_8_1.zip
-    dest: /tmp/Bandage.zip
-    mode: 0744
-- name: Create Bandage directory
-  ansible.builtin.file:
-    path: '{{ home_path }}/Bandage/'
-    state: directory
-- name: Unzip Bandage.
-  ansible.builtin.unarchive:
-    src: /tmp/Bandage.zip
-    dest: '{{ home_path }}/Bandage/'
-    remote_src: true
-- name: Copy Bandage to path.
-  become: true
-  ansible.builtin.copy:
-    src: '{{ home_path }}/Bandage/Bandage'
-    dest: /usr/local/bin/Bandage
-    remote_src: true
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    mode: '0755'
-- name: Install x server in Ubuntu 20.04. or 18.04.
-  become: true
-  ansible.builtin.apt:
-    pkg: 
-      - xorg
-      - qt5-default # not anymore (deprecated) in Ubuntu 22.04 LTS, it was in Ubuntu 20.04
-  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '20.04' or ansible_distribution_version == '18.04')
-- name: Install x server in Ubuntu 22.04.
-  become: true
-  ansible.builtin.apt:
-    pkg: 
-      - xorg-server-source
-      - qtbase5-dev 
-      - qtchooser 
-      - qt5-qmake 
-      - qtbase5-dev-tools
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04'
-- name: Download minigraph.
-  ansible.builtin.get_url:
-    url: 'https://github.com/lh3/minigraph/archive/refs/tags/v{{ minigraph_version }}.tar.gz'
-    dest: /tmp/minigraph.tar.gz
-    owner: '{{ username }}'
-    mode: 0755
-- name: Unzip minigraph.
-  ansible.builtin.unarchive:
-    src: /tmp/minigraph.tar.gz
-    dest: /tmp/
-    remote_src: true
-- name: Build minigraph.
-  command: make
-  args: 
-    chdir: '/tmp/minigraph-{{ minigraph_version}}'
-    creates: '/tmp/minigraph-{{ minigraph_version }}/minigraph'
-- name: Copy minigraph to path.
-  become: true
-  ansible.builtin.copy:
-    src: '/tmp/minigraph-{{ minigraph_version }}/minigraph'
-    dest: /usr/local/bin/minigraph
-    remote_src: true
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    mode: '0755'
-- name: Download seqwish.
-  ansible.builtin.get_url:
-    url: 'https://github.com/ekg/seqwish/releases/download/{{ seqwish_version }}/seqwish-{{ seqwish_version }}.tar.gz'
-    dest: /tmp/seqwish.tar.gz
-    owner: '{{ username }}'
-    mode: 0755
-- name: Unzip seqwish.
-  ansible.builtin.unarchive:
-    src: /tmp/seqwish.tar.gz
-    dest: /tmp/
-    remote_src: true
-- name: Make seqwish 1/2.
-  ansible.builtin.command: cmake -H. -Bbuild 
-  args:
-    chdir: '/tmp/seqwish-{{ seqwish_version }}'
-    creates: '/tmp/seqwish-{{ seqwish_version}}/build/Makefile'
-- name: Make seqwish 2/2.
-  ansible.builtin.command: cmake --build build -- -j 3
-  args:
-    chdir: '/tmp/seqwish-{{ seqwish_version }}'
-    creates: '/tmp/seqwish-{{ seqwish_version }}/bin/seqwish'
-- name: Copy seqwish to path.
-  become: true
-  ansible.builtin.copy:
-    src: '/tmp/seqwish-{{ seqwish_version }}/bin/seqwish'
-    dest: /usr/local/bin/seqwish
-    remote_src: true
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    mode: '0755'
+# - name: Download miniasm.
+#   ansible.builtin.get_url:
+#     url: 'https://github.com/lh3/miniasm/archive/refs/tags/v{{ miniasm_version }}.tar.gz'
+#     dest: /tmp/miniasm.tar.gz
+#     owner: '{{ username }}'
+#     mode: 0755
+# - name: Unzip miniasm.
+#   ansible.builtin.unarchive:
+#     src: /tmp/miniasm.tar.gz
+#     dest: /tmp/
+#     remote_src: true
+# - name: Build miniasm.
+#   command: make
+#   args: 
+#     chdir: '/tmp/miniasm-{{ miniasm_version }}'
+#     creates: '/tmp/miniasm- {{ miniasm_version }}/miniasm'
+# - name: Copy miniasm to path.
+#   become: true
+#   ansible.builtin.copy:
+#     src: '/tmp/miniasm-{{ miniasm_version }}/miniasm'
+#     dest: /usr/local/bin/miniasm
+#     remote_src: true
+#     owner: '{{ username }}'
+#     group: '{{ username }}'
+#     mode: '0755'
+# - name: Download vg.
+#   become: true
+#   get_url:
+#     url: 'https://github.com/vgteam/vg/releases/download/{{ vg_version }}/vg'
+#     dest: /usr/local/bin/vg
+#     owner: '{{ username }}'
+#     mode: 0755
+# - name: Download odgi.
+#   become: true
+#   get_url:
+#     url: 'https://github.com/pangenome/odgi/releases/download/{{ odgi_version }}/odgi-{{ odgi_version }}.tar.gz'
+#     dest: /tmp/odgi.tar.gz
+#     owner: '{{ username }}'
+#     mode: 0755
+# - name: Unzip odgi.
+#   ansible.builtin.unarchive:
+#     src: /tmp/odgi.tar.gz
+#     dest: /tmp/
+#     remote_src: true
+# - name: Make odgi 1/2.
+#   ansible.builtin.command: cmake -DBUILD_STATIC=1 -H. -Bbuild 
+#   args:
+#     chdir: '/tmp/odgi-{{ odgi_version }}'
+#     creates: '/tmp/odgi-{{ odgi_version }}/build/Makefile'
+# - name: Make odgi 2/2.
+#   ansible.builtin.command: cmake --build build -- -j 3
+#   args:
+#     chdir: '/tmp/odgi-{{ odgi_version }}'
+#     creates: '/tmp/odgi- {{odgi_version }}/bin/odgi'
+# - name: Copy odgi to path.
+#   become: true
+#   ansible.builtin.copy:
+#     src: '/tmp/odgi-{{ odgi_version }}/bin/odgi'
+#     dest: /usr/local/bin/odgi
+#     remote_src: true
+#     owner: '{{ username }}'
+#     group: '{{ username }}'
+#     mode: '0755'
+# - name: Get Bandage.
+#   ansible.builtin.get_url:
+#     url: https://github.com/rrwick/Bandage/releases/download/v0.8.1/Bandage_Ubuntu_dynamic_v0_8_1.zip
+#     dest: /tmp/Bandage.zip
+#     mode: 0744
+# - name: Create Bandage directory
+#   ansible.builtin.file:
+#     path: '{{ home_path }}/Bandage/'
+#     state: directory
+# - name: Unzip Bandage.
+#   ansible.builtin.unarchive:
+#     src: /tmp/Bandage.zip
+#     dest: '{{ home_path }}/Bandage/'
+#     remote_src: true
+# - name: Copy Bandage to path.
+#   become: true
+#   ansible.builtin.copy:
+#     src: '{{ home_path }}/Bandage/Bandage'
+#     dest: /usr/local/bin/Bandage
+#     remote_src: true
+#     owner: '{{ username }}'
+#     group: '{{ username }}'
+#     mode: '0755'
+# - name: Install x server in Ubuntu 20.04. or 18.04.
+#   become: true
+#   ansible.builtin.apt:
+#     pkg: 
+#       - xorg
+#       - qt5-default # not anymore (deprecated) in Ubuntu 22.04 LTS, it was in Ubuntu 20.04
+#   when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '20.04' or ansible_distribution_version == '18.04')
+# - name: Install x server in Ubuntu 22.04.
+#   become: true
+#   ansible.builtin.apt:
+#     pkg: 
+#       - xorg-server-source
+#       - qtbase5-dev 
+#       - qtchooser 
+#       - qt5-qmake 
+#       - qtbase5-dev-tools
+#   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22.04'
+# - name: Download minigraph.
+#   ansible.builtin.get_url:
+#     url: 'https://github.com/lh3/minigraph/archive/refs/tags/v{{ minigraph_version }}.tar.gz'
+#     dest: /tmp/minigraph.tar.gz
+#     owner: '{{ username }}'
+#     mode: 0755
+# - name: Unzip minigraph.
+#   ansible.builtin.unarchive:
+#     src: /tmp/minigraph.tar.gz
+#     dest: /tmp/
+#     remote_src: true
+# - name: Build minigraph.
+#   command: make
+#   args: 
+#     chdir: '/tmp/minigraph-{{ minigraph_version}}'
+#     creates: '/tmp/minigraph-{{ minigraph_version }}/minigraph'
+# - name: Copy minigraph to path.
+#   become: true
+#   ansible.builtin.copy:
+#     src: '/tmp/minigraph-{{ minigraph_version }}/minigraph'
+#     dest: /usr/local/bin/minigraph
+#     remote_src: true
+#     owner: '{{ username }}'
+#     group: '{{ username }}'
+#     mode: '0755'
+# - name: Download seqwish.
+#   ansible.builtin.get_url:
+#     url: 'https://github.com/ekg/seqwish/releases/download/{{ seqwish_version }}/seqwish-{{ seqwish_version }}.tar.gz'
+#     dest: /tmp/seqwish.tar.gz
+#     owner: '{{ username }}'
+#     mode: 0755
+# - name: Unzip seqwish.
+#   ansible.builtin.unarchive:
+#     src: /tmp/seqwish.tar.gz
+#     dest: /tmp/
+#     remote_src: true
+# - name: Make seqwish 1/2.
+#   ansible.builtin.command: cmake -H. -Bbuild 
+#   args:
+#     chdir: '/tmp/seqwish-{{ seqwish_version }}'
+#     creates: '/tmp/seqwish-{{ seqwish_version}}/build/Makefile'
+# - name: Make seqwish 2/2.
+#   ansible.builtin.command: cmake --build build -- -j 3
+#   args:
+#     chdir: '/tmp/seqwish-{{ seqwish_version }}'
+#     creates: '/tmp/seqwish-{{ seqwish_version }}/bin/seqwish'
+# - name: Copy seqwish to path.
+#   become: true
+#   ansible.builtin.copy:
+#     src: '/tmp/seqwish-{{ seqwish_version }}/bin/seqwish'
+#     dest: /usr/local/bin/seqwish
+#     remote_src: true
+#     owner: '{{ username }}'
+#     group: '{{ username }}'
+#     mode: '0755'
 - name: Download smoothxg.
   ansible.builtin.get_url:
     url: 'https://github.com/pangenome/smoothxg/releases/download/{{ smoothxg_version }}/smoothxg-{{ smoothxg_version }}.tar.gz'
@@ -390,7 +390,7 @@
     dest: /tmp/
     remote_src: true
 - name: Make smoothxg.
-  ansible.builtin.command: cmake -H. -Bbuild 
+  ansible.builtin.command: cmake -H. -Bbuild
   args:
     chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
     creates: '/tmp/smoothxg-{{ smoothxg_version}}/build/Makefile'
