@@ -87,76 +87,59 @@
       command: "kmc --help"
       register: kmc_help
       failed_when: kmc_help.stderr != ''
-    
-        - name: Check wfmash installation
+    - name: Check wfmash installation
       command: "wfmash --help"
       register: wfmash_help
       failed_when: wfmash_help.stderr != ''
-    
     - name: Check seqwish installation
       command: "seqwish --help"
       register: seqwish_help
       failed_when: seqwish_help.stderr != ''
-    
     - name: Check smoothxg installation
       command: "smoothxg --help"
       register: smoothxg_help
       failed_when: smoothxg_help.stderr != ''
-    
     - name: Check gfaffix installation
       command: "gfaffix --help"
       register: gfaffix_help
       failed_when: gfaffix_help.stderr != ''
-    
     - name: Check pggb installation
       command: "pggb --help"
       register: pggb_help
-      # failed_when: pggb_help.stderr != "ERROR: mandatory arguments -i and -n\nERROR: -n must be greater than or equal to 2"
       failed_when: 
         - "'ERROR: mandatory arguments -i and -n' not in pggb_help.stderr"
         - "'ERROR: -n must be greater than or equal to 2' not in pggb_help.stderr"
-    
     - name: Check cactus installation
       command: "conda activate cactus && cactus --help && conda deactivate"
       register: cactus_help
       failed_when: cactus_help.stderr != ''
-    
     - name: Check snpEff installation
       command: "java -jar /home/ubuntu/snpEff/snpEff.jar"
       register: snpEff_help
       failed_when: snpEff_help.stdout != ''
-    
     - name: Check ClinEff installation
       command: "java -jar /home/ubuntu/snpEff/ClinEff.jar --help"
       register: ClinEff_help
       failed_when: ClinEff_help.stdout != ''
-    
     - name: Check miniasm installation
       command: "miniasm"
       register: miniasm_help
       failed_when: miniasm_help.stdout != ''
-    
     - name: Check minigraph installation
       command: "minigraph"
       register: minigraph_help
       failed_when: minigraph_help.stdout != ''
-    
     - name: Check vg installation
       command: "vg"
       register: vg_help
       failed_when: vg_help.stdout != ''
-    
     - name: Check odgi installation
       command: "odgi"
       register: odgi_help
       failed_when: odgi_help.stdout != ''
-    
     - name: Check RTG installation
       command: "/home/ubuntu/rtg-tools-3.12.1/rtg --help"
       register: RTG_help
       failed_when: RTG_help.stderr != ''
-
-
-
   handlers:
     - import_tasks: ../handlers/main.yml

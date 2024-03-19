@@ -9,8 +9,8 @@
     
     jobs:
     
-      pangenotyping:
-        name: Pangenotyping_role
+      pangenomics:
+        name: pangenomics_role
         runs-on: ubuntu-latest
         
         steps:
@@ -24,7 +24,10 @@
     
           - name: Install test dependencies.
             run: pip3 install ansible-core
-    
+          
+          - name: Install community.general collection
+            run: ansible-galaxy collection install community.general
+            
           - name: Install Pangenotyping role and run tests.
             run: ansible-playbook tests/test.yml
             
