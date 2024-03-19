@@ -62,11 +62,11 @@
 
 - name: Get libzstd-dev version
   command: dpkg -l | grep libzstd-dev
-  register: libzstd-dev_version_output
+  register: libzstd_dev_version_output
 
 - name: Debug libzstd-dev version
   debug:
-    var: libzstd-dev_version_output.stdout_lines
+    var: libzstd_dev_version_output.stdout_lines
 
 - name: Download smoothxg.
   ansible.builtin.get_url:
