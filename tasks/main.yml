@@ -27,11 +27,13 @@
     pkg: 
       - build-essential
       - cmake
+      - libatomic-ops-dev
       - libgsl-dev
       - libhts-dev
-      - libjemalloc-dev
+      - zlib1g-dev
       - libz-dev
       - libzstd-dev
+      - libjemalloc-dev
       - python3-distutils
       - python3-dev
       - pkg-config
@@ -58,13 +60,13 @@
   debug:
     var: cmake_version_output.stdout_lines
 
-- name: Get Python version
-  command: python --version | head -n1
-  register: python_version_output
+- name: Get libzstd-dev version
+  command: dpkg -l | grep libzstd-dev
+  register: libzstd-dev_version_output
 
-- name: Debug python version
+- name: Debug libzstd-dev version
   debug:
-    var: python_version_output.stdout_lines
+    var: libzstd-dev_version_output.stdout_lines
 
 - name: Download smoothxg.
   ansible.builtin.get_url:
@@ -83,7 +85,7 @@
     chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
     creates: '/tmp/smoothxg-{{ smoothxg_version}}/build/Makefile'
 - name: Make smoothxg 2.
-  ansible.builtin.command: cmake --build build -- -j 3
+  ansible.builtin.command: cmake --build build -- -j 4
   args:
     chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
     creates: '/tmp/smoothxg-{{ smoothxg_version }}/bin/smoothxg'
