@@ -9,8 +9,8 @@
     
     jobs:
     
-      pangenotyping:
-        name: Pangenotyping_role
+      pangenomics:
+        name: pangenomics_role
         runs-on: ubuntu-latest
         
         steps:

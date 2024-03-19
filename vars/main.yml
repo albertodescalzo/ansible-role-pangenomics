@@ -20,8 +20,6 @@ minigraph_version: 0.20
 vg_version: v1.48.0
 graphtyper2_version: v2.7.5
 odgi_version: v0.8.3
-novograph_version: 1.0.0
-htslib_version: 1.17
 rtgtools_version: 3.12.1
 truvari_version: 4.1.0
 bayestyper_version: v1.5
