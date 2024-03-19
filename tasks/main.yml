@@ -42,6 +42,44 @@
       - vcftools
       - kmc
       - bwa
+- name: Get GCC version
+  command: gcc --version | head -n1
+  register: gcc_version_output
+
+- name: Debug GCC version
+  debug:
+    var: gcc_version_output.stdout_lines
+
+- name: Download smoothxg.
+  ansible.builtin.get_url:
+    url: 'https://github.com/pangenome/smoothxg/releases/download/{{ smoothxg_version }}/smoothxg-{{ smoothxg_version }}.tar.gz'
+    dest: /tmp/smoothxg.tar.gz
+    owner: '{{ username }}'
+    mode: 0755
+- name: Unzip smoothxg.
+  ansible.builtin.unarchive:
+    src: /tmp/smoothxg.tar.gz
+    dest: /tmp/
+    remote_src: true
+- name: Make smoothxg.
+  ansible.builtin.command: cmake -H. -Bbuild
+  args:
+    chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
+    creates: '/tmp/smoothxg-{{ smoothxg_version}}/build/Makefile'
+- name: Make smoothxg 2.
+  ansible.builtin.command: cmake --build build -- -j 3
+  args:
+    chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
+    creates: '/tmp/smoothxg-{{ smoothxg_version }}/bin/smoothxg'
+- name: Copy smoothxg to path.
+  become: true
+  ansible.builtin.copy:
+    src: '/tmp/smoothxg-{{ smoothxg_version }}/bin/smoothxg'
+    dest: /usr/local/bin/smoothxg
+    remote_src: true
+    owner: '{{ username }}'
+    group: '{{ username }}'
+    mode: '0755'
 # - name: Install snakemake with mamba.
 #   command: '{{ home_path }}/miniforge3/bin/mamba create -c conda-forge -c bioconda -n snakemake -y snakemake={{ snakemake_version}}'
 #   args:
@@ -378,36 +416,7 @@
 #     owner: '{{ username }}'
 #     group: '{{ username }}'
 #     mode: '0755'
-- name: Download smoothxg.
-  ansible.builtin.get_url:
-    url: 'https://github.com/pangenome/smoothxg/releases/download/{{ smoothxg_version }}/smoothxg-{{ smoothxg_version }}.tar.gz'
-    dest: /tmp/smoothxg.tar.gz
-    owner: '{{ username }}'
-    mode: 0755
-- name: Unzip smoothxg.
-  ansible.builtin.unarchive:
-    src: /tmp/smoothxg.tar.gz
-    dest: /tmp/
-    remote_src: true
-- name: Make smoothxg.
-  ansible.builtin.command: cmake -H. -Bbuild
-  args:
-    chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
-    creates: '/tmp/smoothxg-{{ smoothxg_version}}/build/Makefile'
-- name: Make smoothxg 2.
-  ansible.builtin.command: cmake --build build -- -j 3
-  args:
-    chdir: '/tmp/smoothxg-{{ smoothxg_version }}'
-    creates: '/tmp/smoothxg-{{ smoothxg_version }}/bin/smoothxg'
-- name: Copy smoothxg to path.
-  become: true
-  ansible.builtin.copy:
-    src: '/tmp/smoothxg-{{ smoothxg_version }}/bin/smoothxg'
-    dest: /usr/local/bin/smoothxg
-    remote_src: true
-    owner: '{{ username }}'
-    group: '{{ username }}'
-    mode: '0755'
+
 - name: Download wfmash.
   ansible.builtin.get_url:
     url: 'https://github.com/waveygang/wfmash/releases/download/{{ wfmash_version }}/wfmash-{{ wfmash_version }}.tar.gz'
