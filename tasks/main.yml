@@ -32,7 +32,7 @@
       - libjemalloc-dev
       - libz-dev
       - libzstd-dev
-      - python3-distutils 
+      - python3-distutils
       - python3-dev
       - pkg-config
       - unzip
@@ -49,6 +49,22 @@
 - name: Debug GCC version
   debug:
     var: gcc_version_output.stdout_lines
+
+- name: Get cmake version
+  command: cmake --version | head -n1
+  register: cmake_version_output
+
+- name: Debug cmake version
+  debug:
+    var: cmake_version_output.stdout_lines
+
+- name: Get Python version
+  command: python --version | head -n1
+  register: python_version_output
+
+- name: Debug python version
+  debug:
+    var: python_version_output.stdout_lines
 
 - name: Download smoothxg.
   ansible.builtin.get_url:
