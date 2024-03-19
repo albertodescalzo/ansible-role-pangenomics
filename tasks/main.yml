@@ -51,7 +51,7 @@
     var: gcc_version_output.stdout_lines
 
 - name: Get cmake version
-  command: cmake --version | head -n1
+  command: cmake --version
   register: cmake_version_output
 
 - name: Debug cmake version
