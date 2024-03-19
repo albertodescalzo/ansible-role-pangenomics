@@ -7,7 +7,7 @@ miniconda_version: py310_23.3.1-0
 miniforge_version: 23.11.0-0
 wfmash_version: v0.10.3
 seqwish_version: v0.7.9
-smoothxg_version: v0.7.0
+smoothxg_version: 0.7.0
 gfaffix_version: 0.1.4b
 pggb_version: 0.5.3
 cactus_version: v2.5.2
